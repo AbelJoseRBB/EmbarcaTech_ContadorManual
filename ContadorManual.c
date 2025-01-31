@@ -1,3 +1,5 @@
+// Desenvolvido por Abel José Rocha Barros Bezerra
+
 #include <stdio.h>
 #include "hardware/pio.h"
 #include "pico/stdlib.h"
@@ -6,8 +8,8 @@
 #include "hardware/clocks.h"
 #include "pio_matrix.pio.h"
 
-#define pin_red 13
-#define botaoA  5
+#define pin_red 13 
+#define botaoA  5   
 #define botaoB  6
 
 double inicio[25] = {
@@ -18,17 +20,18 @@ double inicio[25] = {
     0.0, 1.0, 1.0, 1.0, 0.0
 };
 
-int i = 0;
+int i = 0; // Váriavel global contadora
 
 // Variáveis globais para sinalizar o pressionamento dos botões
 volatile bool botaoA_press = false;
 volatile bool botaoB_press = false;
 
-// Função para tratar da interrupções dem ambos os botões
+// Função para tratar da interrupções e debouncing em ambos os botões
 void button_isr(uint gpio, uint32_t events){
     static absolute_time_t last_press = 0;
     absolute_time_t now = get_absolute_time();
 
+    // Verifica se o intervalo de ativação é maior que 200ms (debouncing)
     if(absolute_time_diff_us(last_press, now) > 200000){
         if(gpio == botaoA){
             if(!gpio_get(botaoA))  // Verifica se o botão A está pressionado
@@ -39,7 +42,7 @@ void button_isr(uint gpio, uint32_t events){
                     botaoB_press = true; // Sinaliza que o botão B foi pressionado
             } 
         }
-        last_press = now;
+        last_press = now; // Atualiza o tempo do último acionamento 
     }
 }
 
@@ -82,35 +85,38 @@ int main()
 
     stdio_init_all();
     inicializar_pinos();
-    desenho_pio(inicio, pio, sm, 0.2, 0.0, 0.2);
+
+    desenho_pio(inicio, pio, sm, 0.5, 0.0, 0.5);
 
     while (true) {
-        piscar_led_vermelho();
 
-        if(botaoA_press){
-            botaoA_press = false;
+        piscar_led_vermelho(); // Pisca o LED vermelho 5x por segundo
+
+        if(botaoA_press){   // Garante que o botão A foi pressionado
+            botaoA_press = false; 
             printf("Botão A pressionado\n");
             i++;
-        
-            if(i > 9){
+
+            // Garante que o contador não passe do valor máximo
+            if(i > 9){    
                 printf("Número não suportado\n");
                 i--;
             }
-
-            contador(i, pio, sm);
-             
+ 
+            contador(i, pio, sm); // Chama a função que confere o valor do contador e imprime ele na matriz de LED
         }else{
-            if(botaoB_press){
+            if(botaoB_press){   // Garante que o botão B foi pressionado
                 printf("Botão B pressionado\n");
                 botaoB_press = false; 
                 i--;
 
+                // Garante que o contador não passe do valor mínimo
                 if(i < 0){
                     printf("Número não suportado\n");
                     i++;
                 }
 
-                decrementador(i, pio, sm);
+                contador(i, pio, sm); // Chama a função que confere o valor do contador e imprime ele na matriz de LED
             }
         }
     }
