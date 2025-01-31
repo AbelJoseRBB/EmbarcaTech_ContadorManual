@@ -2,12 +2,21 @@
 #include "hardware/pio.h"
 #include "pico/stdlib.h"
 #include "./Bibliotecas/led_matriz.h"
+#include "./Bibliotecas/contador.h"
 #include "hardware/clocks.h"
 #include "pio_matrix.pio.h"
 
 #define pin_red 13
 #define botaoA  5
 #define botaoB  6
+
+double inicio[25] = {
+    0.0, 1.0, 1.0, 1.0, 0.0,
+    0.0, 1.0, 0.0, 1.0, 0.0,
+    0.0, 1.0, 0.0, 1.0, 0.0,
+    0.0, 1.0, 0.0, 1.0, 0.0,
+    0.0, 1.0, 1.0, 1.0, 0.0
+};
 
 int i = 0;
 
@@ -20,7 +29,7 @@ void button_isr(uint gpio, uint32_t events){
     static absolute_time_t last_press = 0;
     absolute_time_t now = get_absolute_time();
 
-    if(absolute_time_diff_us(last_press, now) > 100000){
+    if(absolute_time_diff_us(last_press, now) > 200000){
         if(gpio == botaoA){
             if(!gpio_get(botaoA))  // Verifica se o botão A está pressionado
                 botaoA_press = true; // Sinaliza que o botão A foi pressionado
@@ -63,85 +72,7 @@ void piscar_led_vermelho(){
     sleep_ms(200);
 }
 
-double num0[25] = {
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0
-};
 
-double num1[25] = {
-    0.0, 0.0, 1.0, 0.0, 0.0,
-    0.0, 1.0, 1.0, 0.0, 0.0,
-    0.0, 0.0, 1.0, 0.0, 0.0,
-    0.0, 0.0, 1.0, 0.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0
-};
-
-double num2[25] = {
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 0.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0
-};
-
-double num3[25] = {
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0
-};
-
-double num4[25] = {
-    0.0, 1.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0
-};
-
-double num5[25] = {
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 0.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0
-};
-
-double num6[25] = {
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 0.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0
-};
-
-double num7[25] = {
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0
-};
-
-double num8[25] = {
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0
-};
-
-double num9[25] = {
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0, 1.0, 0.0
-};
 
 int main()
 {
@@ -153,53 +84,34 @@ int main()
     stdio_init_all();
 
     inicializar_pinos();
-
+    desenho_pio(inicio, pio, sm, 0.5, 0.0, 0.5);
     while (true) {
-
+        
         if(botaoA_press){
+            botaoA_press = false;
             printf("Botão A pressionado\n");
-            botaoA_press = false; // reseta a flag
-            i = (i + 1) % 10;
+            i++;
+        
+            if(i > 9){
+                printf("Número não suportado\n");
+                i--;
+            }
+
+            contador(i, pio, sm);
+             
         }else{
             if(botaoB_press){
                 printf("Botão B pressionado\n");
-                botaoB_press = false;
-            i = (i - 1 + 10) % 10;
+                botaoB_press = false; 
+                i--;
+
+                if(i < 0){
+                    printf("Número não suportado\n");
+                    i++;
+                }
+
+                decrementador(i, pio, sm);
             }
-        }
-        switch (i){
-        case 0:
-            desenho_pio(num0, pio, sm, 1.0, 0.0, 1.0);
-            break;
-        case 1:
-            desenho_pio(num1, pio, sm, 1.0, 0.0, 1.0);
-            break;
-        case 2:
-            desenho_pio(num2, pio, sm, 1.0, 0.0, 1.0);
-            break;
-        case 3:
-            desenho_pio(num3, pio, sm, 1.0, 0.0, 1.0);
-            break;
-        case 4:
-            desenho_pio(num4, pio, sm, 1.0, 0.0, 1.0);
-            break;
-        case 5:
-            desenho_pio(num5, pio, sm, 1.0, 0.0, 1.0);
-            break;
-        case 6:
-            desenho_pio(num6, pio, sm, 1.0, 0.0, 1.0);
-            break;
-        case 7:
-            desenho_pio(num7, pio, sm, 1.0, 0.0, 1.0);
-            break;
-        case 8:
-            desenho_pio(num8, pio, sm, 1.0, 0.0, 1.0);
-            break;
-        case 9:
-            desenho_pio(num9, pio, sm, 1.0, 0.0, 1.0);
-            break;
-        default: printf("Número não suportado!\n");
-            break;
         }
     }
 }

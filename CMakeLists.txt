@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(ContadorManual ContadorManual.c arquivosC/led_matriz.c)
+add_executable(ContadorManual ContadorManual.c arquivosC/led_matriz.c arquivosC/contador.c)
 
 pico_set_program_name(ContadorManual "ContadorManual")
 pico_set_program_version(ContadorManual "0.1")
