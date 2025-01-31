@@ -68,11 +68,10 @@ void inicializar_pinos(){
 // Pisca o LED vermelho 
 void piscar_led_vermelho(){ 
     gpio_put(pin_red, 1);
+    sleep_ms(100);
     gpio_put(pin_red, 0);   
-    sleep_ms(200);
+    sleep_ms(100);
 }
-
-
 
 int main()
 {
@@ -82,11 +81,12 @@ int main()
     pio_matrix_program_init(pio, sm, offset, OUT_PIN);
 
     stdio_init_all();
-
     inicializar_pinos();
-    desenho_pio(inicio, pio, sm, 0.5, 0.0, 0.5);
+    desenho_pio(inicio, pio, sm, 0.2, 0.0, 0.2);
+
     while (true) {
-        
+        piscar_led_vermelho();
+
         if(botaoA_press){
             botaoA_press = false;
             printf("Botão A pressionado\n");
