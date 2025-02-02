@@ -86,7 +86,7 @@ int main()
     stdio_init_all();
     inicializar_pinos();
 
-    desenho_pio(inicio, pio, sm, 0.5, 0.0, 0.5);
+    desenho_pio(inicio, pio, sm, 0.7, 0.2, 0.7);
 
     while (true) {
 

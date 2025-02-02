@@ -93,25 +93,25 @@ double num9[25] = {
 // Função que confere e imprime o valor do contador na matriz de LED
 void contador(int cont, PIO pio, uint sm){
     switch (cont){
-        case 0: desenho_pio(num0, pio, sm, 0.5, 0.0, 0.5);
+        case 0: desenho_pio(num0, pio, sm, 0.7, 0.2, 0.7);
                 break;
-        case 1: desenho_pio(num1, pio, sm, 0.5, 0.0, 0.5);
+        case 1: desenho_pio(num1, pio, sm, 0.7, 0.2, 0.7);
                 break;       
-        case 2: desenho_pio(num2, pio, sm, 0.5, 0.0, 0.5);
+        case 2: desenho_pio(num2, pio, sm, 0.7, 0.2, 0.7);
                 break;
-        case 3: desenho_pio(num3, pio, sm, 0.5, 0.0, 0.5);
+        case 3: desenho_pio(num3, pio, sm, 0.7, 0.2, 0.7);
                 break;
-        case 4: desenho_pio(num4, pio, sm, 0.5, 0.0, 0.5);
+        case 4: desenho_pio(num4, pio, sm, 0.7, 0.2, 0.7);
                 break;
-        case 5: desenho_pio(num5, pio, sm, 0.5, 0.0, 0.5);
+        case 5: desenho_pio(num5, pio, sm, 0.7, 0.2, 0.7);
                 break;
-        case 6: desenho_pio(num6, pio, sm, 0.5, 0.0, 0.5);
+        case 6: desenho_pio(num6, pio, sm, 0.7, 0.2, 0.7);
                 break;
-        case 7: desenho_pio(num7, pio, sm, 0.5, 0.0, 0.5);
+        case 7: desenho_pio(num7, pio, sm, 0.7, 0.2, 0.7);
                 break;
-        case 8: desenho_pio(num8, pio, sm, 0.5, 0.0, 0.5);
+        case 8: desenho_pio(num8, pio, sm, 0.7, 0.2, 0.7);
                 break;
-        case 9: desenho_pio(num9, pio, sm, 0.5, 0.0, 0.5);
+        case 9: desenho_pio(num9, pio, sm, 0.7, 0.2, 0.7);
                 break;
         default: printf("Número não suportado\n");
                 break;
